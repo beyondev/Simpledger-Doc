@@ -1,9 +1,25 @@
-## 第2章 Simplechain联盟链功能模块介绍
+## 第2章 Simpledger功能模块介绍
 ### 2.1 区块结构介绍
+区块结构分为两部分，即区块头和区块体。区块头就是simpledger中的区块链部分。它保存了前一个区块（也可称为父区块）的哈希值，通过区块头的连接形成了一条由密码学背书的链。区块体包含了此区块中记录的一系列交易，以及对应的共识信息
+
+![RUNOOB 图标](images/qkjg.png)
 
 #### 2.1.1 区块头
 
+![RUNOOB 图标](images/qkt1.png)
+
+- stateRoot：世界状态树的根节点哈希值（在所有交易被执行后）。
+- transactionsRoot：交易树的根哈希值。是区块中所有交易信息的摘要。
+- receiptsRoot：每当交易执行时，都会生成对应结果的交易收据。此处就是这个交易收据列表的树根节点哈希。
+  其中状态树是Merkle Patricia Tree，交易、回执树是Red Black Tree.
+
+三棵树求取根哈希，可以得到区块头中的StateRoot,TransactionsRoot,ReceiptsRoot三个字段。这样就建立了交易和区块头字段的映射。当其他用户收到块，根据块里的交易可以计算出收据和状态，计算三个根哈希后和区块头的三个字段进行验证，判断这是否为合法的块。
+
 #### 2.1.2 区块体
+
+![RUNOOB 图标](images/qkt2.png)
+
+区块体内以MPT的形式，存储着区块内的全部交易信息，并最终产生transactionsRoot。每个区块能容纳多少笔交易与每笔交易的gas、区块的gaslimt、以及共识是否超时有关。
 
 ### 2.2 网络模块
 由于高性能联盟链的TPS最高可达**20000**+TPS，区块链网络模块的负载增加，因此需要设计**新的拓扑**网络消息传输结构来进行消息的传递。在PBFT共识中，节点的角色分为**观察节点**与**共识节点**，观察节点与共识节点将根据不同的消息进行不同地网络拓扑，以在尽可能地降低共识节点网络载和保持网络健壮性之间找到平衡点。
@@ -103,8 +119,15 @@ Hash common.Hash
 
 ### 2.3 存储模块
 #### 2.3.1数据库类型
+Leveldb：键值对数据库，Simpledger中共有三个LevelDB数据库，分别是BlockDB、StateDB和ExtrasDB，BlockDB保存了块的主体内容，包括块头和交易；StateDB保存了账户的状态数据；ExtrasDB保存了收据信息和其他辅助信息。
+
+RLP：RLP(Recursive Length Prefix）是一种编码算法，用于编码任意的具有嵌套结构的二进制数据，是simpledger联盟链数据序列化的主要方法。
+
+PRLP: PRLP(Parallel Recursive Length Prefix)是经过优化的可并行化的RLP编码算法。
 
 #### 2.3.2存储整体结构
+
+![RUNOOB 图标](images/ztccjg.png)
 
 #### 2.3.3 世界状态树
 
@@ -194,8 +217,6 @@ logs | 此交易的日志
 ##### 交易打包
 为了提高交易处理效率，同时也为了确定交易之后的执行顺序保证事务性，当交易池中有交易时，Sealer线程负责从交易池中按照先进先出的顺序取出一定数量的交易，组装成待共识区块，随后待共识区块会被发往各个节点进行处理。
 
-![RUNOOB 图标](images/jyc.png)
-
 ##### 交易执行
 节点在收到区块后，会调用区块验证器把交易从区块中逐一拿出来执行。执行引擎就会把交易交给EVM（以太坊虚拟机）执行。
 
@@ -273,6 +294,32 @@ Sealer线程打包到交易后，将新区块的打包者(Sealer字段)置为自
 若pre-prepare阶段缓存的区块哈希对应的Commit请求数目超过2f+1，则说明大多数节点达到了可提交该区块状态，且执行结果一致，则调用BlockChain模块将pre-prepare阶段缓存的区块写入数据库；
 
 #### 2.5.2 优化后的PBFT
+##### 平行验证拜占庭容错共识算法（Parallel Byzantine Fault Tolerance）
+
+在传统区块链共识算法(PoW、PoS、DPoS、IBFT、Raft等)中，区块被出块节点打包、验证执行后广播给同步节点，同步节点在获取到新区块后，再对区块进行执行与验证，那么如果该同步区块是下一轮共识的出块节点，区块打包与广播时间将被延迟在这个区块执行之后。在高性能区块链场景中，区块的执行与验证是非常耗时的，如图5所示，节点B在节点A出块后，需要执行验证节点A出的块与自身节点将要出的块，那么共识过程将被推迟至t = 2*t(验证) + t(广播)。
+对于这种问题，以EOS为代表的区块链采用了连续出块的方式，既节点A连续打包并广播n个区块，如此一来，节点B只会在同步A最后一个区块n并产生自己第一个区块时，才会产生延迟出块的情况。
+在Simplechain中，为了更好地解决这一问题，采用了平行验证拜占庭容错共识算法Parallel Byzantine Fault Tolerance，这种算法充分汲取了PBFT共识算法的优势，在执行验证区块时采用了三阶段区块哈希策略，在保证安全性的同时，可以使得所有共识节点在达成共识的同时完成区块的执行与验证，大大缩短了共识达成的时间与出块的间隙时间
+
+![RUNOOB 图标](images/pbftyh.png)
+
+平行验证拜占庭容错共识算法主要流程分为以下几个步骤
+①　Leader节点首先对区块头parentHash、number、difficulty、timestamp、mixDigest、nonce、txRootHash字段计算sealHash，并对此sealHash签名生成leader-signature
+②　Leader节点将leader-signature填充进区块头，对新区块头进行哈希运算可以得到pendingHash，正式开始共识的pending-proposal阶段
+③　Leader节点将pending-proposal封装成pre-prepare消息，向其他共识节点广播，同时，在自己的状态机环境下预执行此pending区块
+④　Replica节点在收到Leader节点的pending-proposal后，会在自己的状态机环境下预执行pending区块
+⑤　Leader节点与Replica节点对预执行的区块结果验证后通过执行后的区块头生成conclusionHash，开始conclusion阶段的共识，对pendingHash、conclusionHash及共识视图状态签名后广播prepare消息
+⑥　共识节点在收到满足拜占庭容错数量的prepare消息后，广播commit消息
+⑦　共识节点在收到满足拜占庭容错数量的commit消息后，在预执行区块的区块头中加入节点签名消息，将共识成功的区块写入自己的区块链中，并提交状态机状态变更。
+
+![RUNOOB 图标](images/pbftyh2.png)
+
+##### 轻区块优化
+
+共识算法使用轻区块Light Block技术，在共识过程中大大降低了网络通信的开销，优化方式如下：
+步骤②中，Leader节点签名生成pending-proposal后，不对其他共识节点广播区块中的交易，仅广播pending区块头以及区块包含的所有交易的哈希，即light-pending-proposal
+步骤④中，Replica节点在收到light-pending-proposal后，首先会从交易池中获取命中的交易填充区块，之后向Leader节点请求缺失的交易数据，填充生成完整的pending-proposal
+
+![RUNOOB 图标](images/lightblock.png)
 
 ### 2.6 智能合约模块
 #### 2.6.1 智能合约的概念
@@ -305,10 +352,10 @@ Sealer线程打包到交易后，将新区块的打包者(Sealer字段)置为自
 #### 2.6.3 虚拟机EVM
 EVM是一个轻量级的虚拟机，其设计是用于在simplechain网络上运行智能合约。虚拟机(VM）是建立在本机操作系统上模拟物理机的高级抽象。同时它也是一个“堆栈机”和一个“状态机”，它是一台可以读取输入并基于这些输入转换为新状态的机器，也是将内存结构组织为堆栈并作为堆栈访问的虚拟机。EVM不仅是沙盒封装的，而且是完全隔离的，作为区块验证协议共识算法的一部分，参与网络的每个节点都会运行EVM。
 
-#### 2.6.4 Simplechain智能合约
+#### 2.6.4 智能合约
 
 - **Solidity：**
-智能合约默认的编程语言，文件扩展名以.sol结尾。Solidity是一种语法类似JavaScript的高级语言。它被设计成以编译的方式生成simplechain联盟链虚拟机代码。
+智能合约默认的编程语言，文件扩展名以.sol结尾。Solidity是一种语法类似JavaScript的高级语言。它被设计成以编译的方式生成虚拟机代码。
 - **合约事件：**
 simplechain联盟链中的事件是一个simplechain联盟链日志和事件监测协议的抽象，日志记录提供合约的地址，事件则利用现有的ABI功能来解析日志记录。对合约事件的监听，可以在业务上实现部分自动化的操作。
 - **权限管理：**

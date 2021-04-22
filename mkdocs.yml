@@ -3,10 +3,10 @@ pages:
   - 整体概述:
     - simpledger介绍: zhengtijieshao.md
   - 系统设计:
-    - 功能模块: gongnengjiesho.md
+    - 功能模块: gongnengjieshao.md
 #    - 关键特性: texingjieshao.md
-    - 接口文档: api.m
-    - RPC接口: rpc.md
+    - 接口文档: rpc.md
+#    - RPC接口: rpc.md
   - 网络搭建:
     - 环境要求: env.md
     - 快速开始: run.md
