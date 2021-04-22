@@ -85,7 +85,7 @@ NETWORKING OPTIONS:
   --maxpeers value                    Maximum number of network peers (network disabled if set to 0) (default: 25)
   --maxpendpeers value                Maximum number of pending connection attempts (defaults used if set to 0) (default: 0)
   --nat value                         NAT port mapping mechanism (any|none|upnp|pmp|extip:<IP>) (default: "any")
-  --nodiscover                        Disables the peer discovery mechanism (manual peer addition)
+  --discover                          Enables the peer discovery mechanism (manual peer addition)
   --v5disc                            Enables the experimental RLPx V5 (Topic Discovery) mechanism
   --netrestrict value                 Restricts network communication to the given IP networks (CIDR masks)
   --nodekey value                     P2P node key file
@@ -147,14 +147,90 @@ PBFT OPTIONS:
   --pbft.requesttimeout value         Timeout for each pbft round in milliseconds (default: 5000)
   --pbft.blockperiod value            Default minimum difference between two consecutive block's timestamps in seconds (default: 1)
   --pbft.light                        Enable send and receive light block
-  --pbft.maxblocktxs value            Default max txs one block can seal (default: 0)
+  --pbft.maxblocktxs value            Default max txs one block can seal (default: 1000)
 
 MISC OPTIONS:
   --override.singularity value        Manually specify singularity fork-block, overriding the bundled setting (default: 0)
   --permissioned                      If enabled, the node will allow only a defined list of nodes to connect
   --help, -h                          show help
-
 ```
-### Simpledger共识管理工具consensus
-
 ### 压力测试工具stress
+
+#### 工具说明
+`stress`是Simpledger官方提供的压力测试工具，使用前，请先在节点启动参数中添加`--ws` `--wsaddr=0.0.0.0`，使得节点可以接受websocket连接请求。启动参数如下：
+```shell
+Usage of stress:
+  -callcode
+    	enable call contract code
+  -chainid uint
+    	chainId (default 1)
+  -check
+    	whether check transaction state
+  -rand
+    	random signer and receiver tx
+  -seed uint
+    	hash seed (default 1)
+  -sendkey string
+    	sender private key。can choose:
+    		"5aedb85503128685e4f92b0cc95e9e1185db99339f9b85125c1e2ddc0f7c4c48",
+    		"41a6df5663e5f674baaea1a021cdee1751ca28777e352ed0467fff420017978b",
+    		"868d8f8b3d50e2a3ebfd5a08b16d84ee015db519d662bb0e5878388f0c15a6e3",
+    		"9259787a40ec58154e7e04ae324b965cb4f199b1ef09708319d50ad36fc1cbeb",
+    		"a42531bd0a7c1df628ab141f3be6086146ed01f74628a467f9f926b3625e17a0",
+    		"2d396fd91b652c687bc6796932a39f190cf7b4aab26e079f8f28baba9939847e",
+    		"35daed192142a1b608b60390036e7d3ad11ec6bc2d09182f3192f70ed54d4f2f",
+    		"6ce1ddaaa7cd15232fd17838ab65b7beb8b6ad8e43be7d61548535b40a2a89b0"
+    		 (default "5aedb85503128685e4f92b0cc95e9e1185db99339f9b85125c1e2ddc0f7c4c48")
+  -sendtx
+    	enable only send tx
+  -threads int
+    	the number of sender (default 4)
+  -timelimit uint
+    	timelimit seconds (default 300)
+  -to string
+    	tx reception
+  -tps int
+    	send tps limit, negative is limitless (default -1)
+  -url string
+    	websocket url (default "ws://127.0.0.1:8546")
+```
+
+#### 测试用例
+
+- 测试随机存证交易
+```shell
+# 向192.168.4.242节点发送交易，6线程并发，每个线程的发送速率为1000TPS，测试300秒
+stress --sendtx --chainid=10388 --url='ws://192.168.4.242:8546' --sendkey='868d8f8b3d50e2a3ebfd5a08b16d84ee015db519d662bb0e5878388f0c15a6e3' --threads=6 --tps=1000 --timelimit=300
+```
+
+- 测试随机转账交易
+```shell
+# 向192.168.4.242节点发送交易，6线程并发，每个线程的发送速率为1000TPS，测试300秒
+stress --sendtx --chainid=10388 --url='ws://192.168.4.242:8546' --sendkey='868d8f8b3d50e2a3ebfd5a08b16d84ee015db519d662bb0e5878388f0c15a6e3' --threads=6 --tps=1000 --timelimit=300 --rand
+```
+
+- 测试合约内转账交易
+COMING SOON
+  
+
+#### 特别说明
+
+在使用`stress`压力测试时，需要在多台机器上同时使用`stress`客户端向多个共识节点发送交易，以达到负载均衡的效果。在16核心，32G内存的3共识节点+1观察节点的内网环境下，使用3个`stress`客户端均衡的发送存证交易，全网TPS可达到20000左右
+
+
+### 共识管理工具consensus
+`consensus`是Simpledger官方提供的共识管理工具，目前仅支持pbft共识，启动参数如下：
+```shell
+NAME:
+   consensus pbft - pbft consenses
+
+USAGE:
+   consensus pbft command [command options] [arguments...]
+
+COMMANDS:
+     generate  generate pbft init file & static-nodes
+     extra     calculate pbft header.extra by validators
+
+OPTIONS:
+   --help, -h  show help
+```
