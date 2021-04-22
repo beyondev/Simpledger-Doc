@@ -83,7 +83,7 @@ sipe --rpc --rpccrosdomain "http://localhost:3000"
 
 - enode: 节点enode字符串
   
-- nodeName： 字符串，无意义
+- nodeName： 字符串，节点别名
   
 - from：20字节，交易发起者的地址
 ```text
@@ -99,13 +99,13 @@ params: [
 示例
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"permission_addNewNodeApply", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","name","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":66}''
+curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"permission_addNewNodeApply", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","name","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":66}'
 
 #结果
 {
 	"jsonrpc":"2.0",
 	"id":66,
-	"result":["0xd79b8287a827e1387e6f0ff6d300fc663e10f592",""]
+	"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]
 }
 ```
 
@@ -136,7 +136,7 @@ params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171
 curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_addNodeToBlackVerify","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"], "latest"],"id":1}'
 
 #结果
-{"jsonrpc":"2.0","id":1,"result":["0xd79b8287a827e1387e6f0ff6d300fc663e10f592",""]}
+{"jsonrpc":"2.0","id":1,"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
 ```
 
 ----------------------
@@ -166,7 +166,7 @@ params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171
 curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_applyByAdmin","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
 
 #结果
-{"jsonrpc":"2.0","id":1,"result":["0xd79b8287a827e1387e6f0ff6d300fc663e10f592",""]}
+{"jsonrpc":"2.0","id":1,"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
 ```
 
 ----------------
@@ -196,7 +196,7 @@ params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171
 curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_disagree","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
 
 #结果
-{"jsonrpc":"2.0","id":1,"result":["0xd79b8287a827e1387e6f0ff6d300fc663e10f592",""]}
+{"jsonrpc":"2.0","id":1,"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
 ```
 
 ---------------
@@ -296,12 +296,255 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_getContractAddress","params":[] ,"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result": ["0x51e766a7f073955c8061073bbba60b10bf12d48a",""]}
+{"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
 ```
 
-------------
+[comment]: <> (------------)
 
-### permission_getNodeMap
+[comment]: <> (### permission_getNodeMap)
 
-获得节点的角色
+[comment]: <> (获得节点的角色)
 
+[comment]: <> (参数： )
+
+[comment]: <> (- enode: 字符串，节点enode)
+
+[comment]: <> (- from： 20字节，交易发起者地址)
+
+[comment]: <> (```text)
+
+[comment]: <> ("param": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"])
+
+[comment]: <> (```)
+
+[comment]: <> (返回： 对应节点角色)
+
+[comment]: <> (示例)
+
+[comment]: <> (```text)
+
+[comment]: <> (#请求)
+
+[comment]: <> (curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_getNodeMap", ,"id":1}')
+
+[comment]: <> (#结果)
+
+[comment]: <> (```)
+
+[comment]: <> (-----------------------)
+
+[comment]: <> (### permission_getStorageAt)
+
+
+---------------
+
+### permission_initFinish
+
+执行此方法后，不允许修改管理员
+
+参数：
+
+- from: 20字节，发起交易者地址
+
+```text
+"params": ["0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： 交易hash和错误
+
+示例：
+
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_initFinish", "params": ["0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+```
+-----------
+
+### permission_isAdmin
+
+判断指定节点是否为管理节点
+
+参数：
+
+- enode： 字符串，节点enode
+
+- from： 20字节，交易发起者地址
+
+```text
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： 指定节点是否为管理节点
+
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_isAdmin", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result": [true,""]}
+```
+
+------------------------
+
+### permission_nodeDowngradeVerify
+
+节点降级投票
+
+参数：
+
+- enode: 字符串， 节点enode
+
+- from： 20字节， 交易发起者地址
+
+```text
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： 交易hash，错误
+
+示例：
+
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_nodeDowngradeVerify", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+```
+
+----------------------
+
+### permission_nodeUpgradeVerify
+
+节点升级投票
+
+参数：
+
+- enode: 字符串， 节点enode
+
+- from： 20字节， 交易发起者地址
+
+```text
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： 交易hash，错误
+
+示例：
+
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_nodeUpgradeVerify", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+```
+
+--------------
+
+### permission_setAdminNode
+
+添加超级节点信息
+
+参数：
+
+- enode: 字符串， 节点enode
+
+- nodeName: 字符串，节点别名
+
+- from： 20字节， 交易发起者地址
+
+```text
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","wuff","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： 交易hash，错误
+
+示例：
+
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_setAdminNode", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","wuff","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+```
+
+--------------------
+
+### permission_setContractAddress
+
+设置管理节点身份的合约地址
+
+参数：
+
+- addr： 20字节地址，合约地址
+
+```text
+"params":["0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： "success",err
+
+示例：
+
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_setContractAddress", "params":["0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result":["success",""]}
+```
+
+---------------
+### permission_updateNodeInfo
+
+更新自身的节点信息
+
+参数：
+
+- ip： 字符串，ip
+- port： 字符串，端口
+- from： 20字节，交易发起者地址
+
+```text
+"params":["192.168.6.66","666","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： 交易hash，错误
+
+示例：
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_updateNodeInfo", "params":["192.168.6.66","666","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+```
+
+---------------------
+### permission_verifyAddNodeApply
+验证节点申请
+
+参数：
+
+- enode： 字符串，节点enode
+- from： 20字节，交易发起者地址
+
+```text
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+```
+
+返回： 交易hash，错误
+
+示例：
+```text
+#请求
+curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_verifyAddNodeApply", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+
+#结果
+{"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+```
