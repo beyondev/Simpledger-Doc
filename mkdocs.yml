@@ -1,4 +1,4 @@
-site_name: Simpledger联盟链
+site_name: Simpledger联盟区块链平台
 pages:
   - 整体概述:
     - simpledger介绍: zhengtijieshao.md
@@ -8,6 +8,9 @@ pages:
     - 接口文档: api.m
     - RPC接口: rpc.md
   - 网络搭建:
+    - 环境要求: env.md
     - 快速开始: run.md
+    - 节点管理: peer.md
+    - 实用工具: tool.md
 version: v1.0.0
 theme: readthedocs
