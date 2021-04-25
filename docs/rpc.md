@@ -22,7 +22,7 @@ Default JSON-RPC endpoints:
 
 |Client| URL                    |
 | ---- |        ----            |
-|  sipe| http://localhost:8546  |
+|  sipe| http://localhost:9546  |
 
 
 
@@ -33,7 +33,7 @@ Default JSON-RPC endpoints:
 sipe --rpc
 ```
 
-修改默认端口（8546）和列表地址（localhost）更改为:
+修改默认端口（9546）和列表地址（localhost）更改为:
 ```shell
 sipe --rpc --rpcaddr <ip> --rpcport <portnumber>
 ```
@@ -634,7 +634,7 @@ curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "
 params: [
     'enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0',
     'test',
-   '0x51e766a7f073955c8061073bbba60b10bf12d48a'
+   '0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013'
 ]
 ```
 
@@ -643,14 +643,10 @@ params: [
 示例
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"permission_addNewNodeApply", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","name","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":66}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"permission_addNewNodeApply", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","name","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":66}'
 
 #结果
-{
-	"jsonrpc":"2.0",
-	"id":66,
-	"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]
-}
+{"jsonrpc":"2.0","id":66,"result":"0xf54ea2e12935f1f47b53d347152a388d0419217e947a6f7654e0dd4d35eb13d0"}
 ```
 
 ----------------------
@@ -668,7 +664,7 @@ curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "
 示例:
 
 ```text
-params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易执行完成后的hash
@@ -677,7 +673,7 @@ params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_addNodeToBlackVerify","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"], "latest"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_addNodeToBlackVerify","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
 {"jsonrpc":"2.0","id":1,"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
@@ -698,7 +694,7 @@ curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2
 - from： 20字节地址，交易发起者的地址
 
 ```text
-params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易执行完成后的hash
@@ -707,10 +703,10 @@ params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_applyByAdmin","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_applyByAdmin","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc":"2.0","id":1,"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+{"jsonrpc":"2.0","id":1,"result":"0x910286dd59935195ad68591b885acd76fd6253f1dbddb290d8de18efe4b4beb0"}
 ```
 
 ----------------
@@ -728,7 +724,7 @@ curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2
 - from： 20字节地址，交易发起者的地址
 
 ```text
-params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 执行交易后的hash
@@ -737,10 +733,10 @@ params: ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_disagree","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"permission_disagree","params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0",1,"0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc":"2.0","id":1,"result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+{"jsonrpc":"2.0","id":1,"result":"0x8a8f3e3ce956b0bea255f4749ad475178da59bf659b25b181b7a83377c624291"}
 ```
 
 ---------------
@@ -756,7 +752,7 @@ curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2
 - stateKey： 字符串，申请者enodeId+opCode
 
 ```text
-"param": ["0x51e766a7f073955c8061073bbba60b10bf12d48a","enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=01"]
+"param": ["0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013","enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=01"]
 ```
 
 返回： 本节点是否投过票
@@ -765,7 +761,7 @@ curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method": "permission_findNotVoteRecordForMe","param": ["0x51e766a7f073955c8061073bbba60b10bf12d48a","enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=01"],"id",1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method": "permission_findNotVoteRecordForMe","param": ["0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013","enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=01"],"id":1}'
 
 #结果
 {"jsonrpc":"2.0","id":1,"result":[false,""]}
@@ -784,7 +780,7 @@ curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2
 - from: 20字节，交易发起者地址
 
 ```text
-"param": [3,"0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"param": [3,"0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 对应类型的所有节点的enode
@@ -793,10 +789,10 @@ curl localhost:8546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_getAllNode", "param": [3,"0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_getAllNode", "params": [3,"0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result":["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147,enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147",""]}
+{"jsonrpc":"2.0","id":1,"result":"enode://9cae78c7c2344f7d52a568bcfc2eff90cc4f7339efe28dc2f29cc5150b78b7ecf844008f5db47cece8c9931f2218ce659229158feb31cb9abbcf32fe09bbac6b,"}
 ```
 
 ----------------
@@ -810,7 +806,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from： 20字节，交易发起者地址
 
 ```text
-"param": "0x51e766a7f073955c8061073bbba60b10bf12d48a"
+"param": "0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"
 ```
 
 返回： 返回字符串（enodeId+opType），以逗号分割
@@ -819,10 +815,10 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_getAllStatingRecord","param": "0x51e766a7f073955c8061073bbba60b10bf12d48a" ,"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_getAllStatingRecord","params": ["0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"] ,"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result": "enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca5330191471，enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca5330191471",""}
+{"jsonrpc":"2.0","id":1,"result":",enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca5330191470"}
 ```
 
 ### permission_getContractAddress
@@ -837,10 +833,10 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_getContractAddress","params":[] ,"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_getContractAddress","params":[] ,"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+{"jsonrpc":"2.0","id":1,"result":"0xc904510CD1C53655fDf541aEdd467C44A187daF9"}
 ```
 
 [comment]: <> (------------)
@@ -857,7 +853,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 [comment]: <> (```text)
 
-[comment]: <> ("param": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"])
+[comment]: <> ("param": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"])
 
 [comment]: <> (```)
 
@@ -869,7 +865,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 [comment]: <> (#请求)
 
-[comment]: <> (curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_getNodeMap", ,"id":1}')
+[comment]: <> (curl localhost:9546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_getNodeMap", ,"id":1}')
 
 [comment]: <> (#结果)
 
@@ -891,7 +887,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from: 20字节，发起交易者地址
 
 ```text
-"params": ["0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params": ["0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易hash和错误
@@ -900,10 +896,10 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_initFinish", "params": ["0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_initFinish", "params": ["0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+{"jsonrpc":"2.0","id":1,"result":"0x2886d0b3546d0a17ccb7f075d4abd52ef3fd2c55a656d782fbc08a9e8e4e5358"}
 ```
 -----------
 
@@ -918,17 +914,17 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from： 20字节，交易发起者地址
 
 ```text
-"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 指定节点是否为管理节点
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_isAdmin", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_isAdmin", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result": [true,""]}
+{"jsonrpc":"2.0","id":1,"result":false}
 ```
 
 ------------------------
@@ -944,7 +940,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from： 20字节， 交易发起者地址
 
 ```text
-"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易hash，错误
@@ -953,7 +949,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_nodeDowngradeVerify", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_nodeDowngradeVerify", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
 {"jsonrpc": "2.0", "id":1, "result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
@@ -972,7 +968,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from： 20字节， 交易发起者地址
 
 ```text
-"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易hash，错误
@@ -981,7 +977,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_nodeUpgradeVerify", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_nodeUpgradeVerify", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
 {"jsonrpc": "2.0", "id":1, "result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
@@ -1002,7 +998,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from： 20字节， 交易发起者地址
 
 ```text
-"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","wuff","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","wuff","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易hash，错误
@@ -1011,10 +1007,10 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_setAdminNode", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","wuff","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_setAdminNode", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","wuff","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result":["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+{"jsonrpc":"2.0","id":1,"result":"0xe27788f0548ebc055d61e147c1ed7adce3060800bba999932d4afe797807185a"}
 ```
 
 --------------------
@@ -1028,7 +1024,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - addr： 20字节地址，合约地址
 
 ```text
-"params":["0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params":["0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： "success",err
@@ -1037,10 +1033,10 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_setContractAddress", "params":["0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_setContractAddress", "params":["0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result":["success",""]}
+{"jsonrpc":"2.0","id":1,"result":"success"}
 ```
 
 ---------------
@@ -1055,7 +1051,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from： 20字节，交易发起者地址
 
 ```text
-"params":["192.168.6.66","666","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params":["192.168.6.66","666","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易hash，错误
@@ -1063,10 +1059,10 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 示例：
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_updateNodeInfo", "params":["192.168.6.66","666","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_updateNodeInfo", "params":["192.168.6.66","666","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
-{"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
+{"jsonrpc":"2.0","id":1,"result":"0x1e63892a5df025819d2e70ba9cfe420990ad2256f84edef7ce28a7bd1cd54b39"}
 ```
 
 ---------------------
@@ -1079,7 +1075,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 - from： 20字节，交易发起者地址
 
 ```text
-"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"]
+"params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"]
 ```
 
 返回： 交易hash，错误
@@ -1087,7 +1083,7 @@ curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", 
 示例：
 ```text
 #请求
-curl localhost:8546 -X POST -H "Content-Type:application" -d '{"jsonrpc":"2.0", "method": "permission_verifyAddNodeApply", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":1}'
+curl localhost:9546 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0", "method": "permission_verifyAddNodeApply", "params": ["enode://0922743d9409959e788a8bcdde1fbde9336709d72abdd9e681979551e6e171631f2f9459330dcb18922c14eacb5b507aba74a86a81832389c8618ca533019147@192.168.111.111:21001?discport=0","0xc0560d2e856d12102d31dc2250fe1c7dbcfa8013"],"id":1}'
 
 #结果
 {"jsonrpc": "2.0", "id":1, "result": ["0x3d9d9349dca94094720dee9c0677413b9092fc4c2cbb493a80d2c4c2c260a208",""]}
