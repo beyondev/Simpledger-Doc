@@ -187,9 +187,13 @@ sipe --datadir=dd4 init genesis_pbft.json
 ```
 
 #### 第二步.以观察节点模式启动节点
-在192.168.4.185机器中启动dd4节点，以观察节点模式启动（不添加`--mine`参数及pbft共识相关参数）
+1.在192.168.4.185机器中启动dd4节点，以观察节点模式启动（不添加`--mine`参数及pbft共识相关参数）
 ```shell
 sipe --datadir=dd4 --port=21004 --rpc --rpcaddr="0.0.0.0" --rpcapi="eth,personal,permission,admin" --allow-insecure-unlock
+```
+2.导入节点私钥到keystore（本教程中默认密码为空）
+```shell
+sipe --datadir=dd4 account import dd4/sipe/nodekey
 ```
 
 #### 第三步.在节点准入合约中批准此节点加入
@@ -266,6 +270,25 @@ sipe attach http://192.168.4.185:8545 --exec "admin.addPeer(\"enode://7abc413fce
 sipe attach http://192.168.4.185:8545 --exec "admin.addPeer(\"enode://aea0c32fb3669089a941a519ab7aaca641b34e63e4ff5918c0a6092736e24008b9739c31f1aae528b7ac53028b130b4e8cb1661122f2a8c70e24b977034e4a11@192.168.4.189:21002\")"
 # 连接192.168.4.66
 sipe attach http://192.168.4.185:8545 --exec "admin.addPeer(\"enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f@192.168.4.66:21003\")"
+```
+
+#### 第五步.为新节点添加余额
+1.查看新节点地址
+```shell
+# 登录192.168.4.185
+sipe attach http://192.168.4.185:8545 --exec "admin.nodeInfo.address"
+# 返回结果
+"0x4bee77698C54D9119009486B83ae64E7714Adf65"
+```
+2.通过原有节点向新节点转账
+```shell
+# 登录192.168.4.242
+ssh ubuntu@192.168.4.242
+cd simple
+# 解锁账户
+sipe attach dd1/sipe.ipc --exec="personal.unlockAccount(eth.accounts[0],'')"
+# 发起转账交易
+sipe attach dd1/sipe.ipc --exec "eth.sendTransaction(from:eth.accounts[0],to:\"0x4bee77698C54D9119009486B83ae64E7714Adf65\",value:1e20)"
 ```
 
 ### 共识节点管理
@@ -381,5 +404,61 @@ sipe attach dd1/sipe.ipc --exec "permission.getNodeMap(\"enode://55dbca4836be9df
 ```
 
 #### 节点降级为普通节点
+本教程中，将ip为`192.168.4.185`的节点降级为普通节点
+
+1.管理节点提议降级节点
+```shell
+# (注: 这里使用ubuntu用户进行操作; 实际操作时，可使用自己的账户进行类似操作, IP也需要替换成自己的机器IP)
+# 登录192.168.4.242
+ssh ubuntu@192.168.4.242
+# 进入permission目录
+cd simple/permission
+# 发起提议交易
+./perm_script.sh -m applyByAdmin -u "http://192.168.4.242:8545" -e "enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066@192.168.4.185:21004" -r 3
+```
+
+
+2.管理节点对节点降级提案进行投票
+```shell
+# 192.168.4.242节点投票
+./perm_script.sh -m nodeDowngradeVerify -u "http://192.168.4.242:8545" -e "enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066@192.168.4.185:21004"
+
+# 192.168.4.185节点投票
+./perm_script.sh -m nodeDowngradeVerify -u "http://192.168.4.185:8545" -e "enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066@192.168.4.185:21004"
+```
+
+3.查看确认节点降级成功
+```shell
+# 进入simple目录
+cd ~/simple
+sipe attach dd1/sipe.ipc --exec "permission.getNodeMap(\"enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066\", eth.accounts[0])"
+# 返回结果中role0则表示该节点降级成功
+"role:0, url:enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066@192.168.4.185:21004"
+```
 
 #### 节点退出系统
+本教程中，将将ip为`192.168.4.66`的节点降级为普通节点（注：节点在离开网络前，必须降级为非管理节点）
+
+1.管理节点提议剔除节点
+```shell
+# (注: 这里使用ubuntu用户进行操作; 实际操作时，可使用自己的账户进行类似操作, IP也需要替换成自己的机器IP)
+# 登录192.168.4.242
+ssh ubuntu@192.168.4.242
+# 进入permission目录
+cd simple/permission
+# 发起提议交易
+./perm_script.sh -m applyByAdmin -u "http://192.168.4.242:8545" -e "enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f@192.168.4.66:21003" -r 0
+```
+
+
+2.管理节点对节点剔除提案进行投票
+```shell
+./perm_script.sh -m addNodeToBlackVerify -u "http://192.168.4.242:8545" -e "enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f@192.168.4.66:21003"
+```
+
+3.查看确认节点降级成功
+```shell
+# 进入simple目录
+cd ~/simple
+sipe attach dd1/sipe.ipc --exec "permission.getNodeMap(\"enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f\", eth.accounts[0])"
+```
