@@ -10,7 +10,7 @@
 #### 注意：dd1 ob1 ob2 已升级为共识节点。
 
 ```shell
-docker run --name sipe  -v /var/sipe/ob1/:/pbftdata/ob1/log/ -v /var/sipe/ob2/:/pbftdata/ob2/log/ -v /var/sipe/ob3/:/pbftdata/ob3/log/ -p 9546:9546 -p 6541:6541 -p 6542:6542 -p 6543:6543 sipe:1.0
+docker run -d --name sipe  -v /var/sipe/ob1/:/pbftdata/ob1/log/ -v /var/sipe/ob2/:/pbftdata/ob2/log/ -v /var/sipe/ob3/:/pbftdata/ob3/log/ -p 9546:9546 -p 6541:6541 -p 6542:6542 -p 6543:6543 sipe:1.0
 ```
 
 #### 第三步，查看日志
