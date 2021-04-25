@@ -73,6 +73,464 @@ sipe --rpc --rpccrosdomain "http://localhost:3000"
 
 --------------------------
 
+#### eth_storeTransaction
+
+发起存证交易，将数据存到链上
+
+##### 参数
+
+- from | Address : 发起交易的地址
+- data | Hex : 存证交易数据
+
+```
+params: ["0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d", "0xde883385856c14242b3e0c0bfa701ee7b8269a7155b113f0c40d65bfabb603af"]
+```
+
+##### 返回
+
+`DATA`, 32个字节 - 交易哈希，如果交易尚不可用，则为零哈希.
+
+在交易被打包之后，当您创建合约时，使用eth-getTransactionReceipt获取合约地址。
+
+##### 示例
+
+```
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"eth_storeTransaction","params":["0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d","0xde883385856c14242b3e0c0bfa701ee7b8269a7155b113f0c40d65bfabb603af"],"id":1}'
+#结果
+{
+	"jsonrpc": "2.0",
+	"id": 1,
+	"result": "0xf19aba07fa29e0627c80a5fd684bce38b9c14fdf6af114dbd0d0520e5b142864"
+}
+```
+
+----------------------
+
+#### eth_sendTransaction
+
+如果数据字段包含代码，则创建新的消息调用交易或合约创建。
+
+##### 参数
+
+1. `Object` - 交易对象
+
+- `from`: `DATA`, 20个字节 - 这笔交易发自的地址
+- `to`: `DATA`, 20个字节 - (创建新合约时可选) 交易处理的目标地址.
+- `gas`: `QUANTITY` - (可选, 默认: 50000) 为交易执行提供的gas数。它将返回未使用的gas。
+- `gasPrice`: `QUANTITY` - (可选) 每一个使用的gas的价格
+- `value`: `QUANTITY` - (可选) 与此交易一起发送的值的整数（转账的数额）
+- `data`: `DATA` - 合约的编译代码或被调用方法签名和编码参数的哈希.
+- `nonce`: `QUANTITY` - (可选) 一个随机的nonce的整数。如果您需要发送两笔数据相同的交易，请修改nonce值
+- `blockLimit`: `QUANTITY` - (可选) 交易允许的最大被打包进区块的高度
+
+```
+params: [{
+  "from": "0xb60e8dd61c5d32be8058bb8eb970870f07233155",
+  "to": "0xd46e8dd67c5d32be8058bb8eb970870f07244567",
+  "gas": "0x76c0", // 30400
+  "gasPrice": "0x9184e72a000", // 10000000000000
+  "value": "0x9184e72a", // 2441406250
+  "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+}]
+```
+
+##### 返回
+
+`DATA`, 32个字节 - 交易哈希，如果交易尚不可用，则为零哈希.
+
+在交易被打包之后，当您创建合约时，使用eth-getTransactionReceipt获取合约地址。
+
+##### 示例
+
+```
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc":"2.0","method":"eth_sendTransaction","params":[{
+  "from": "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d",
+  "to": "0xac49f5e5b9161e0cb42372c90183d8428b060ff1",
+  "gas": "0x76c0", 
+  "gasPrice": "0x9184e72a000", 
+  "value": "0x9184e72a", 
+  "data": "0xd46e8dd67c5d32be8d46e8dd67c5d32be8058bb8eb970870f072445675058bb8eb970870f072445675"
+}],"id":1}'
+#结果
+{
+	"jsonrpc": "2.0",
+	"id": 1,
+	"result": "0x06ad3f17e6b6fa9cafcf33594be175e77e0debbfdd0f6b4391d9d532c444e9c6"
+}
+```
+
+----------------------
+
+#### pbft_propose
+
+提议新的共识节点
+
+参数：
+
+- address: 被提议的节点地址
+- auth: true-提议加入，false-提议退出
+
+```text
+params: [
+   "0x51e766a7f073955c8061073bbba60b10bf12d48a",true
+]
+```
+
+返回： 无
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_propose", "params": ["0x51e766a7f073955c8061073bbba60b10bf12d48a",true],"id":66}'
+
+#结果
+{
+	"jsonrpc":"2.0",
+	"id":66,
+	"result":null
+}
+```
+
+----------------------
+
+#### pbft_proposeEnode
+
+提议新的共识节点
+
+参数： 
+
+- enodeId | String: 被提议的节点的enodeId（注：不包含enode://字符串以及ip端口）
+- auth: true-提议加入，false-提议退出
+
+```text
+params: [
+ "7abc413fce75c301a7536457db0bdbde5001ad4b6b2cb89e98657294b5c6fdb74c7a5426c94d80e4529d6c3f80f8d5314b89fb4039678f10a92fa5084f221e1b",true
+]
+```
+
+返回： 无
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_proposeEnode", "params": ["7abc413fce75c301a7536457db0bdbde5001ad4b6b2cb89e98657294b5c6fdb74c7a5426c94d80e4529d6c3f80f8d5314b89fb4039678f10a92fa5084f221e1b",true],"id":66}'
+
+#结果
+{
+	"jsonrpc":"2.0",
+	"id":66,
+	"result":null
+}
+```
+
+----------------------
+
+#### pbft_candidates
+
+查看候选人名单
+
+参数：
+无
+
+返回： 候选人地址列表
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_candidates", "params": [],"id":66}'
+
+#结果
+{
+	"jsonrpc":"2.0",
+	"id":66,
+	"result":{"0xAd16E2987d86A5bBFC34C3844CE7D16FCFf5Fd5d":true}
+}
+```
+
+----------------------
+
+#### pbft_discard
+
+从候选人列表中移除指定候选人
+
+参数：
+- address: 被移除的候选人地址
+```text
+params: [
+   "0x51e766a7f073955c8061073bbba60b10bf12d48a"
+]
+```
+
+返回： 无
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_discard", "params": ["0x51e766a7f073955c8061073bbba60b10bf12d48a"],"id":66}'
+
+#结果
+{
+	"jsonrpc":"2.0",
+	"id":66,
+	"result":null
+}
+```
+
+----------------------
+
+#### pbft_getSignersFromBlock
+
+查看pbft共识区块的签名人以及投票确认人
+
+参数：
+
+- blockNumber | HEX: 区块高度，若不传则表示获取的是最新区块
+
+```text
+params: [
+   "0xff"
+]
+```
+
+返回： 区块高度、区块哈希、区块签名人地址、区块投票确认人地址列表
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_getSignersFromBlock", "params": ["0xff"],"id":66}'
+
+#结果
+{
+    "jsonrpc": "2.0",
+    "id": 66,
+    "result": {
+        "Number": 255,
+        "Hash": "0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214",
+        "Author": "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d",
+        "Committers": [
+            "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d",
+            "0x49821e1a4ecab3060ba4955c342c5c6a0ab0d765"
+        ]
+    }
+}
+```
+
+----------------------
+
+#### pbft_getSignersFromBlockByHash
+
+查看pbft共识区块的签名人以及投票确认人
+
+参数：
+
+- blockHash | HASH: 区块哈希值
+
+```text
+params: [
+   "0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214"
+]
+```
+
+返回： 区块高度、区块哈希、区块签名人地址、区块投票确认人地址列表
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_getSignersFromBlockByHash", "params": ["0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214"],"id":66}'
+
+#结果
+{
+    "jsonrpc": "2.0",
+    "id": 66,
+    "result": {
+        "Number": 255,
+        "Hash": "0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214",
+        "Author": "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d",
+        "Committers": [
+            "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d",
+            "0x49821e1a4ecab3060ba4955c342c5c6a0ab0d765"
+        ]
+    }
+}
+```
+
+----------------------
+
+#### pbft_getSnapshot
+
+查看pbft共识信息
+
+参数：
+
+- blockNumber | HEX: 区块高度，若不传则表示获取的是最新区块
+
+```text
+params: [
+   "0xff"
+]
+```
+
+返回： 重置投票周期epoch，区块高度、区块哈希、投票列表votes、投票统计tally、当前区块验证者validators、验证人切换方式policy、验证人列表更新版本
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_getSnapshot", "params": ["0xff"],"id":66}'
+
+#结果
+{
+    "jsonrpc": "2.0",
+    "id": 66,
+    "result": {
+        "epoch": 30000,
+        "number": 255,
+        "hash": "0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214",
+        "votes": [],
+        "tally": {},
+        "validators": [
+            "0x49821e1a4ecab3060ba4955c342c5c6a0ab0d765",
+            "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d",
+            "0xb9eb0354dac275cb445d318d2a02dd142d829db8"
+        ],
+        "policy": 0,
+        "version": 1
+    }
+}
+```
+
+----------------------
+
+#### pbft_getSnapshotAtHash
+
+查看pbft共识信息
+
+参数：
+
+- blockHash | HASH: 区块哈希
+
+```text
+params: [
+   "0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214"
+]
+```
+
+返回： 重置投票周期epoch，区块高度、区块哈希、投票列表votes、投票统计tally、当前区块验证者validators、验证人切换方式policy、验证人列表更新版本
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_getSnapshotAtHash", "params": ["0xff"],"id":66}'
+
+#结果
+{
+    "jsonrpc": "2.0",
+    "id": 66,
+    "result": {
+        "epoch": 30000,
+        "number": 255,
+        "hash": "0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214",
+        "votes": [],
+        "tally": {},
+        "validators": [
+            "0x49821e1a4ecab3060ba4955c342c5c6a0ab0d765",
+            "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d",
+            "0xb9eb0354dac275cb445d318d2a02dd142d829db8"
+        ],
+        "policy": 0,
+        "version": 1
+    }
+}
+```
+
+----------------------
+
+#### pbft_getValidators
+
+查看pbft验证人节点列表
+
+参数：
+
+- blockNumber | HEX: 区块高度，若不传则表示获取的是最新区块
+
+```text
+params: [
+   "0xff"
+]
+```
+
+返回： 验证人节点地址列表
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_getValidators", "params": ["0xff"],"id":66}'
+
+#结果
+{
+    "jsonrpc": "2.0",
+    "id": 66,
+    "result": ["0x49821e1a4ecab3060ba4955c342c5c6a0ab0d765", "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d","0xb9eb0354dac275cb445d318d2a02dd142d829db8"]
+}
+```
+
+----------------------
+
+#### pbft_getValidatorsAtHash
+
+查看pbft验证人节点列表
+
+参数：
+
+- blockHash | HASH: 区块哈希
+
+```text
+params: [
+   "0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214"
+]
+```
+
+返回： 验证人节点地址列表
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_getValidatorsAtHash", "params": ["0xc9fa4819cc996d03dca3d1b06d3ce88732f611c2dbfb6571f8fdc90d6fa98214"],"id":66}'
+
+#结果
+{
+    "jsonrpc": "2.0",
+    "id": 66,
+    "result": ["0x49821e1a4ecab3060ba4955c342c5c6a0ab0d765", "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d","0xb9eb0354dac275cb445d318d2a02dd142d829db8"]
+}
+```
+
+----------------------
+
+#### pbft_nodeAddress
+
+查看当前pbft节点地址
+
+参数：无
+
+返回： 地址
+
+示例
+```text
+#请求
+curl localhost:8545 -X POST -H "Content-Type:application/json" -d '{"jsonrpc": "2.0", "method":"pbft_nodeAddress", "params": [],"id":66}'
+
+#结果
+{
+    "jsonrpc": "2.0",
+    "id": 66,
+    "result": "0xad16e2987d86a5bbfc34c3844ce7d16fcff5fd5d"
+}
+```
+
+----------------------
+
 #### txpool_status
 
 查看交易池状态

@@ -154,6 +154,11 @@ MISC OPTIONS:
   --permissioned                      If enabled, the node will allow only a defined list of nodes to connect
   --help, -h                          show help
 ```
+
+#### 交易池关键参数说明
+
+#### 共识关键参数说明
+
 ### 压力测试工具stress
 
 #### 工具说明
@@ -203,15 +208,31 @@ Usage of stress:
 stress --sendtx --chainid=10388 --url='ws://192.168.4.242:8546' --sendkey='868d8f8b3d50e2a3ebfd5a08b16d84ee015db519d662bb0e5878388f0c15a6e3' --threads=6 --tps=1000 --timelimit=300
 ```
 
-- 测试随机转账交易
+- 测试转账交易
 ```shell
 # 向192.168.4.242节点发送交易，6线程并发，每个线程的发送速率为1000TPS，测试300秒
-stress --sendtx --chainid=10388 --url='ws://192.168.4.242:8546' --sendkey='868d8f8b3d50e2a3ebfd5a08b16d84ee015db519d662bb0e5878388f0c15a6e3' --threads=6 --tps=1000 --timelimit=300 --rand
+stress --sendtx --chainid=10388 --url='ws://192.168.4.242:8546' --sendkey='868d8f8b3d50e2a3ebfd5a08b16d84ee015db519d662bb0e5878388f0c15a6e3' --threads=6 --tps=1000 --timelimit=300 --to=<转账的目的地址>
 ```
 
 - 测试合约内转账交易
 COMING SOON
   
+#### TPS计算
+
+使用cmd/stress目录内的`get_tps.sh`脚本计算交易打包进区块的TPS
+
+- `path`: 节点日志文件路径
+- `startTime`: 统计开始时间，精确到毫秒
+- `endTime`: 统计结束时间，精确到毫秒
+
+```shell
+./get_tps.sh <path> startTime endTime
+```
+
+举例
+```shell
+./get_tps.sh ./pbftdata/dd1/log/super.log "11:25:20.332" "11:25:24.977"
+```
 
 #### 特别说明
 

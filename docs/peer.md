@@ -268,7 +268,9 @@ sipe attach http://192.168.4.185:8545 --exec "admin.addPeer(\"enode://aea0c32fb3
 sipe attach http://192.168.4.185:8545 --exec "admin.addPeer(\"enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f@192.168.4.66:21003\")"
 ```
 
-### 选举新的共识节点
+### 共识节点管理
+
+#### 选举新的共识节点
 
 本教程中，将上文新加入的节点即ip为`192.168.4.185`的观察节点选举为新的共识节点
 
@@ -282,7 +284,7 @@ ssh ubuntu@192.168.4.242
 cd simple
 # 通过enodeid选举
 sipe attach dd1/sipe.ipc --exec "pbft.proposeEnode('55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066',true)"
-# 登录192.168.4.242
+# 登录192.168.4.189
 ssh ubuntu@192.168.4.189
 cd simple
 # 通过enodeid选举
@@ -300,5 +302,84 @@ cd simple
 sipe --datadir=dd4 --port=21004 --rpc --rpcaddr="0.0.0.0" --rpcapi="eth,personal,permission,admin" --pbft.light --pbft.maxblocktxs=20000 --allow-insecure-unlock --mine 
 ```
 
-### 选举新的管理节点
-COMING SOON
+#### 投票剔除共识节点
+
+本教程中，将ip为`192.168.4.66`的共识节点剔除为观察节点
+
+1.共识节点投票
+分别在`192.168.4.242` `192.168.4.189` `192.168.4.185`机器上进行投票
+```shell
+# (注: 这里使用ubuntu用户进行操作; 实际操作时，可使用自己的账户进行类似操作, IP也需要替换成自己的机器IP)
+# 登录192.168.4.242
+ssh ubuntu@192.168.4.242
+cd simple
+# 通过enodeid投票剔除
+sipe attach dd1/sipe.ipc --exec "pbft.proposeEnode('d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f',false)"
+# 登录192.168.4.189
+ssh ubuntu@192.168.4.189
+cd simple
+# 通过enodeid投票剔除
+sipe attach dd2/sipe.ipc --exec "pbft.proposeEnode('d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f',false)"
+# 登录192.168.4.185
+ssh ubuntu@192.168.4.185
+cd simple
+# 通过enodeid投票剔除
+sipe attach dd4/sipe.ipc --exec "pbft.proposeEnode('d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f',false)"
+# 此时已有2/3节点参与选举，共识节点已被剔除
+```
+
+2.观察节点停止出块
+
+原共识节点被投票剔除后已没有出块权限，提交新区块时会出现以下错误日志
+```shell
+INFO [04-25|07:28:22.314] Commit new byzantium work                number=13636 sealhash=f82b8d…492b83 elapsed=132.557µs    maxTxsCanSeal=250
+WARN [04-25|07:28:22.314] Block sealing failed                     err=unauthorized
+```
+
+因此，停止该节点的出块操作
+```text
+# 登录192.168.4.66
+ssh ubuntu@192.168.4.66
+cd simple
+# 停止出块
+sipe attach dd3/sipe.ipc --exec "miner.stop()"
+```
+
+当此节点重新启动时，以观察模式启动，不添加`--mine`启动参数
+```shell
+sipe --datadir=dd3 --port=21003 --rpc --rpcaddr="0.0.0.0" --rpcapi="eth,personal,permission,admin" --ws --allow-insecure-unlock
+```
+
+### 节点权限管理
+
+#### 节点升级为管理节点
+本教程中，将上文新加入的节点即ip为`192.168.4.185`的节点选举为新的管理节点
+
+1.管理节点提议升级新节点
+```shell
+# (注: 这里使用ubuntu用户进行操作; 实际操作时，可使用自己的账户进行类似操作, IP也需要替换成自己的机器IP)
+# 登录192.168.4.242
+ssh ubuntu@192.168.4.242
+# 进入permission目录
+cd simple/permission
+# 发起提议交易
+./perm_script.sh -m applyByAdmin  -u "http://192.168.4.242:8545" -e "enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066@192.168.4.185:21004" -r 2
+```
+
+2.管理节点对节点升级提案进行投票
+```shell
+./perm_script.sh -m nodeUpgradeVerify -u "http://192.168.4.242:8545" -e "enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066@192.168.4.185:21004"
+```
+
+3.查看确认节点升级成功
+```shell
+# 进入simple目录
+cd ~/simple
+sipe attach dd1/sipe.ipc --exec "permission.getNodeMap(\"enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066\", eth.accounts[0])"
+# 返回结果中role为2则表示该节点成功升级为管理节点
+"role:2, url:enode://55dbca4836be9df4ee1fcd7ca15dc0ca6bcf454afaf08bef28106818be12ee58c32e66534594e4d18eb7480bcfd609c0649571a034c0dfc5114b9b751dd77066@192.168.4.185:21004"
+```
+
+#### 节点降级为普通节点
+
+#### 节点退出系统
