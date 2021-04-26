@@ -447,7 +447,7 @@ ssh ubuntu@192.168.4.242
 # 进入permission目录
 cd simple/permission
 # 发起提议交易
-./perm_script.sh -m applyByAdmin -u "http://192.168.4.242:8545" -e "enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f@192.168.4.66:21003" -r 0
+./perm_script.sh -m applyByAdmin -u "http://192.168.4.242:8545" -e "enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f@192.168.4.66:21003" -r 1
 ```
 
 
@@ -461,4 +461,6 @@ cd simple/permission
 # 进入simple目录
 cd ~/simple
 sipe attach dd1/sipe.ipc --exec "permission.getNodeMap(\"enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f\", eth.accounts[0])"
+# 返回结果中role1则表示该节点剔除成功
+"role:1, url:enode://d91a99f05a139b32e196b10ef63a97526d6a1c546d35f19a8c3d6b764ba99e5c7eb0bfe3b43eaa56e75b073cc65f585af651c04b6b08d9c8c78c9cc39fc9ab3f@192.168.4.66:21003"
 ```
