@@ -25,7 +25,6 @@ Default JSON-RPC endpoints:
 |  sipe| http://localhost:9546  |
 
 
-
 ### sipe
 你可以使用--rpc标志启动http json-rpc
 
