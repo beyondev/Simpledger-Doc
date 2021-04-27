@@ -10,7 +10,7 @@ docker pull simplechain/simpledger
 
 #### 第二步.启动节点
 
-**注意：dd1 ob1 ob2 已升级为共识节点。**
+**注意：dd1 ob1 ob2 已升级为共识节点**
 
 ```shell
 docker run -d --name sipe  -v /var/sipe/ob1/:/pbftdata/ob1/log/ \
