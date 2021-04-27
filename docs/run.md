@@ -44,6 +44,7 @@ tail -f /var/sipe/ob3/ob.log
 #### 第四步.开启控制台
 
 **注意： dd1 ob1 ob2 已升级为共识节点**
+
 dd1节点：
 ```shell
 sipe attach http://localhost:9546
